@@ -154,4 +154,14 @@ const DAPPS = [
   },
 
   
+   {
+    id: "dapp-013",
+    name: "Intuition Dex",
+    description: "Intuition Dex Exchange",
+    logoUrl: "images/temple.png",
+    websiteUrl: "https://intution.vercel.app/",
+    category: "DeFi",
+    status: "Launched",
+    tags: ["Games", "Community"]
+  },
 ];
