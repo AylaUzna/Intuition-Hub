@@ -79,7 +79,7 @@ const DAPPS = [
     id: "dapp-006",
     name: "VitalTip",
     description: "This decentralized application allows anyone to send small tips to a recipient's wallet address. It's a simple, effective tool to encourage community engagement and reward contributors directly on the blockchain.",
-    logoUrl: "images/trustswap.png",
+    logoUrl: "images/vital.png",
     websiteUrl: "https://vitaltip-intuition.vercel.app/",
     category: "DeFi",
     status: "Launched",
@@ -158,10 +158,21 @@ const DAPPS = [
     id: "dapp-013",
     name: "Intuition Dex",
     description: "Intuition Dex Exchange",
-    logoUrl: "images/temple.png",
+    logoUrl: "images/dex.png",
     websiteUrl: "https://intution.vercel.app/",
     category: "DeFi",
     status: "Launched",
     tags: ["Games", "Community"]
+  },
+
+  {
+    id: "dapp-008",
+    name: "GUESSNET",
+    description: "Data Attestation app for intuition ",
+    logoUrl: "images/attestation.png",
+    websiteUrl: "https://intuitionattest-45169.bubbleapps.io/version-test/",
+    category: "Attestation",
+    status: "Launched",
+    tags: ["Attestations", "Community"]
   },
 ];
