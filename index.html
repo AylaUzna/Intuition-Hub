@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Intuition Builders Epoch — Community dApps</title>
+  <meta name="description" content="Browse community-built dApps on the Intuition chain." />
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --panel: #121620;
+      --muted: #a8b0c0;
+      --text: #e7ecf5;
+      --accent: #6ea8ff;
+      --chip: #1b2230;
+      --chip-border: #273149;
+      --ring: #2a3a64;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; background: radial-gradient(1200px 600px at 70% -10%, #14203b33, transparent), var(--bg); color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
+      line-height: 1.45;
+    }
+
+    .container { max-width: 1080px; margin: 0 auto; padding: 24px; }
+
+    header {
+      text-align: center; padding: 40px 0 24px; margin-bottom: 8px;
+    }
+    h1 { font-size: clamp(28px, 3vw, 40px); margin: 0 0 10px; }
+    .sub { color: var(--muted); font-size: clamp(14px, 2vw, 18px); margin: 0; }
+
+    .toolbar {
+      display: grid; gap: 12px; grid-template-columns: 1fr; margin: 24px 0 20px;
+    }
+    @media (min-width: 720px) {
+      .toolbar { grid-template-columns: 1fr 180px 180px; }
+    }
+
+    .control {
+      background: var(--panel); border: 1px solid var(--ring); border-radius: var(--radius);
+      display: flex; align-items: center; padding: 10px 12px; gap: 10px; box-shadow: var(--shadow);
+    }
+    .control input, .control select {
+      background: transparent; border: none; outline: none; color: var(--text); width: 100%; font-size: 14px;
+    }
+
+    .grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 980px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .card {
+      background: linear-gradient(0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02)), var(--panel);
+      border: 1px solid #1e2433; border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow);
+      display: flex; flex-direction: column; gap: 12px; min-height: 190px;
+    }
+    .top { display: flex; gap: 12px; align-items: center; }
+    .logo { width: 48px; height: 48px; border-radius: 12px; background: #0f1320; flex: 0 0 48px; object-fit: cover; }
+    .name { font-weight: 700; margin: 0; font-size: 18px; }
+    .meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+    .desc { color: #cfd6e6; font-size: 14px; margin: 4px 0 0; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .chip { font-size: 11px; padding: 6px 10px; background: var(--chip); border: 1px solid var(--chip-border); border-radius: 999px; color: #d6def0; }
+
+    .actions { margin-top: auto; }
+    .btn {
+      display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+      width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid #2a3a64; background: #16203a;
+      color: #e2ebff; text-decoration: none; font-weight: 600; transition: transform .04s ease, background .2s ease;
+    }
+    .btn:hover { background: #1a2950; transform: translateY(-1px); }
+
+    footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px 0 40px; }
+    .count { color: #a4b8ff; font-weight: 700; }
+
+    .empty { text-align: center; color: var(--muted); padding: 24px; border: 1px dashed #2a3a64; border-radius: var(--radius); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Intuition Builders Epoch — Community dApps</h1>
+      <p class="sub">A simple directory of projects built by the community. Search, filter, and launch.</p>
+    </header>
+
+    <!-- Controls: search + filters -->
+    <div class="toolbar">
+      <label class="control" aria-label="Search projects">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 21l-4.2-4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/></svg>
+        <input id="search" placeholder="Search projects..." />
+      </label>
+
+      <label class="control" aria-label="Filter by category">
+        <select id="filter-category"></select>
+      </label>
+
+      <label class="control" aria-label="Filter by status">
+        <select id="filter-status"></select>
+      </label>
+    </div>
+
+    <!-- Live count -->
+    <p class="sub" id="results-count" style="margin: 0 0 14px;"></p>
+
+    <!-- Cards grid -->
+    <section id="cards" class="grid" aria-live="polite"></section>
+
+    <p id="empty" class="empty" style="display:none">No projects match your search yet. Try clearing filters.</p>
+
+    <footer>
+      Built with ♥ for the Intuition community.
+      <a href="https://x.com/ayla_uzna">Twitter</a>
+    </footer>
+  </div>
+
+  <!--
+    🔧 HOW TO EDIT (this is the only part you need to change):
+    1) Replace the sample items below with your real dApps.
+    2) Keep the same keys (name, description, websiteUrl, category, status, tags, logoUrl).
+    3) You can use any image URL for logoUrl (PNG/JPG/SVG hosted anywhere).
+    4) Categories and statuses will be detected automatically and appear in the filters.
+  -->
+  <script id="dapps-data" type="application/json">
+  [
+    {
+      "id": "dapp-001",
+      "name": "Intuition Swap",
+      "description": "A decentralized exchange built on the Intuition chain.",
+      "logoUrl": "https://via.placeholder.com/96x96.png?text=Swap",
+      "websiteUrl": "https://swap.intuition.systems",
+      "category": "DeFi",
+      "status": "Launched",
+      "tags": ["DEX", "Liquidity"]
+    },
+    {
+      "id": "dapp-002",
+      "name": "Intuition Social",
+      "description": "A decentralized social platform for the community.",
+      "logoUrl": "https://via.placeholder.com/96x96.png?text=Social",
+      "websiteUrl": "https://social.intuition.systems",
+      "category": "Social",
+      "status": "In-progress",
+      "tags": ["Social", "Community"]
+    }
+  ]
+  </script>
+
+  <script>
+    // ===== Utilities =====
+    const $ = (sel) => document.querySelector(sel);
+    const cardsEl = $('#cards');
+    const searchEl = $('#search');
+    const catEl = $('#filter-category');
+    const statusEl = $('#filter-status');
+    const countEl = $('#results-count');
+    const emptyEl = $('#empty');
+
+    /** Read JSON from the script tag */
+    let DAPPS = [];
+    try { DAPPS = JSON.parse(document.getElementById('dapps-data').textContent.trim()); }
+    catch (e) { console.error('Could not parse dapps JSON', e); }
+
+    // Build dynamic filter options based on data
+    const categories = ['All', ...Array.from(new Set(DAPPS.map(d => d.category).filter(Boolean)))];
+    const statuses   = ['All', ...Array.from(new Set(DAPPS.map(d => d.status).filter(Boolean)))];
+
+    function fillSelect(select, options) {
+      select.innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join('');
+      select.value = 'All';
+    }
+    fillSelect(catEl, categories);
+    fillSelect(statusEl, statuses);
+
+    function makeChip(text) {
+      const span = document.createElement('span');
+      span.className = 'chip';
+      span.textContent = text;
+      return span;
+    }
+
+    function makeCard(d) {
+      const article = document.createElement('article');
+      article.className = 'card';
+
+      const top = document.createElement('div');
+      top.className = 'top';
+
+      const img = document.createElement('img');
+      img.className = 'logo';
+      img.alt = d.name + ' logo';
+      img.src = d.logoUrl || '';
+      img.onerror = () => { img.style.display = 'none'; };
+
+      const titleWrap = document.createElement('div');
+      const h = document.createElement('h3');
+      h.className = 'name'; h.textContent = d.name;
+      const meta = document.createElement('div');
+      meta.className = 'meta'; meta.textContent = `${d.category || 'Uncategorized'} • ${d.status || 'Unknown'}`;
+      titleWrap.appendChild(h); titleWrap.appendChild(meta);
+
+      top.appendChild(img); top.appendChild(titleWrap);
+
+      const desc = document.createElement('p');
+      desc.className = 'desc'; desc.textContent = d.description || '';
+
+      const chips = document.createElement('div');
+      chips.className = 'chips';
+      (d.tags || []).slice(0, 6).forEach(t => chips.appendChild(makeChip(t)));
+
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+      const a = document.createElement('a');
+      a.href = d.websiteUrl || '#';
+      a.target = '_blank'; a.rel = 'noopener noreferrer';
+      a.className = 'btn';
+      a.textContent = 'Launch dApp';
+      actions.appendChild(a);
+
+      article.appendChild(top);
+      article.appendChild(desc);
+      if ((d.tags || []).length) article.appendChild(chips);
+      article.appendChild(actions);
+      return article;
+    }
+
+    function applyFilters() {
+      const q = searchEl.value.toLowerCase().trim();
+      const cat = catEl.value; const st = statusEl.value;
+      const filtered = DAPPS.filter(d => {
+        const inText = [d.name, d.description, ...(d.tags||[])].join(' ').toLowerCase().includes(q);
+        const inCat = cat === 'All' || d.category === cat;
+        const inSt  = st === 'All'  || d.status === st;
+        return inText && inCat && inSt;
+      });
+
+      cardsEl.innerHTML = '';
+      if (filtered.length === 0) {
+        emptyEl.style.display = 'block';
+      } else {
+        emptyEl.style.display = 'none';
+        filtered.forEach(d => cardsEl.appendChild(makeCard(d)));
+      }
+      countEl.innerHTML = `<span class="count">${filtered.length}</span> project${filtered.length === 1 ? '' : 's'} shown`;
+    }
+
+    searchEl.addEventListener('input', applyFilters);
+    catEl.addEventListener('change', applyFilters);
+    statusEl.addEventListener('change', applyFilters);
+
+    // Initial render
+    applyFilters();
+  </script>
+</body>
+</html>
