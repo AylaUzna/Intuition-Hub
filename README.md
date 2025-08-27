@@ -110,7 +110,3 @@ This project is open-source and available under the **MIT License**.
 ---
 
 ✨ Built with ❤️ for the **Intuition community**
-
----
-
-Would you like me to also **add markdown screenshots** (like your app UI or hero section) inside this `README.md` so your GitHub page looks visually appealing?
